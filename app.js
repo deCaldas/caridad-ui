@@ -1,5 +1,6 @@
-const myElement = document.createElement('my-element');
-document.body.appendChild(myElement);
+const eheader = document.createElement('e-header');
+document.body.appendChild(eheader);
+
 
 const script = document.createElement('script');
 script.src = './components/index.js';
@@ -9,4 +10,3 @@ const style = document.createElement('link');
 style.rel = 'stylesheet';
 style.href = './css/master.css';
 document.head.appendChild(style);
-

@@ -7,12 +7,12 @@
     <title>De Caldas</title>
   </head>
   <body>
-
-    <my-element>
-      <span slot="h">De Caldas</span><br>
-      <span slot="slg">Aplicaciones Web y Móviles</span><br>
-      <span slot="lt">---</span>
-    </my-element>
+    
+    <Header>
+        <slot name="slot-h1">Hola Mundo!!</slot>
+        <slot name="slot-h2">JavaScript Web Components</slot>
+        <slot name="slot-nav">Home</slot>
+    </Header>
 
     <script type="module"></script>
     <script src="./app.js"></script>
