@@ -1,9 +1,8 @@
 const eheader = document.createElement('e-header');
 document.body.appendChild(eheader);
 
-
 const script = document.createElement('script');
-script.src = './components/index.js';
+script.src = './components/header.js';
 document.head.appendChild(script);
 
 const style = document.createElement('link');
