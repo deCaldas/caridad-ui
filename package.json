@@ -1,8 +1,8 @@
 {
-  "name": "wcsjs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "name": "jswcs",
+  "version": "2.0.1",
+  "description": "JavaScript Web Components",
+  "main": "app.js",
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/d-caldasCaridad/wCsJS.git"
+    "url": "git+https://github.com/deCaldas/js.wCs.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Diego Whiskey",
+  "license": "GPLv3",
   "bugs": {
-    "url": "https://github.com/d-caldasCaridad/wCsJS/issues"
+    "url": "https://github.com/deCaldas/js.wCs/issues"
   },
-  "homepage": "https://github.com/d-caldasCaridad/wCsJS#readme",
+  "homepage": "https://decaldas.github.io/js.wCs/",
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/plugin-transform-runtime": "^7.21.0",
