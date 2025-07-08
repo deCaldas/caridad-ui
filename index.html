@@ -7,15 +7,13 @@
     <title>JavaScript Web Components - De Caldas</title>
   </head>
   <body>
-    
-    <Header>
-        <slot name="slot-h1">Hola Mundo!!</slot>
-        <slot name="slot-h2">JavaScript Web Components</slot>
-        <slot name="slot-nav">Home</slot>
-    </Header>
+    <e-header>
+      <h1 slot="title">Web Components</h1>
+      <h2 slot="subtitle">De Caldas</h2>
+      <a href="#" slot="nav">Inicio</a>
+    </e-header>
 
-    <script type="module"></script>
-    <script src="./app.js"></script>
+    <script type="module" src="./src/index.js"></script>
 
   </body>
 </html>
