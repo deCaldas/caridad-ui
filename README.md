@@ -6,8 +6,7 @@
 ![license](https://img.shields.io/npm/l/caridad-ui)
 
 **Web Components modernos, accesibles y sin dependencias.**  
-Diseñado para proyectos artísticos, independientes y open source.  
-Hecho con ❤️ por Diego Toro (aka @deCaldas).
+Diseñado para proyectos artísticos, independientes y open source.
 
 ---
 
@@ -135,4 +134,5 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 ## 👤 Autor
 
 **Diego Toro Cárdenas**
-[@deCaldas](https://github.com/deCaldas) – Rap, Web y Resistencia desde Antioquia.
+
+[@deCaldas](https://github.com/deCaldas).
