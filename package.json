@@ -1,7 +1,8 @@
 {
   "name": "caridad-ui",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "JavaScript Web Components",
+  "type": "module",
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
@@ -11,15 +12,19 @@
     "dist"
   ],
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "dev": "webpack --config webpack.config.mjs --mode development",
+    "build": "webpack --config webpack.config.mjs --mode production"
   },
-  "keywords": ["web-components", "design-system", "ui-kit"],
+  "keywords": [
+    "web-components",
+    "design-system",
+    "ui-kit"
+  ],
   "author": "Diego Toro Cárdenas",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deCaldas/caridad-ui.git"
+    "url": "git+https://github.com/deCaldas/caridad-ui.git"
   },
   "bugs": {
     "url": "https://github.com/deCaldas/caridad-ui/issues"
@@ -27,12 +32,8 @@
   "homepage": "https://decaldas.github.io/caridad-ui/",
   "devDependencies": {
     "@babel/core": "^7.21.3",
-    "@babel/plugin-transform-runtime": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.7.3",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.7.3",
+    "jest": "^30.0.4",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1"
   }
