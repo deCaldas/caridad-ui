@@ -2,6 +2,7 @@
   "name": "caridad-ui",
   "version": "2.0.1",
   "description": "JavaScript Web Components",
+  "type": "module",
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
@@ -11,10 +12,14 @@
     "dist"
   ],
   "scripts": {
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "dev": "webpack --config webpack.config.mjs --mode development",
+    "build": "webpack --config webpack.config.mjs --mode production"
   },
-  "keywords": ["web-components", "design-system", "ui-kit"],
+  "keywords": [
+    "web-components",
+    "design-system",
+    "ui-kit"
+  ],
   "author": "Diego Toro Cárdenas",
   "license": "GPL-3.0",
   "repository": {
@@ -32,6 +37,7 @@
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^30.0.4",
     "mini-css-extract-plugin": "^2.7.3",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1"
