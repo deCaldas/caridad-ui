@@ -135,4 +135,4 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 ## 👤 Autor
 
 **Diego Toro Cárdenas**
-[@deCaldas](https://github.com/deCaldas) – Rap, Web y Resistencia desde Antioquia.
+[@deCaldas](https://github.com/deCaldas).
