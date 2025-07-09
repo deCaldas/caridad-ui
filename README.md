@@ -120,22 +120,9 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 
 ---
 
-## 📘 Documentación
+## 🌐 Sitio oficial:
 
-Próximamente en: [https://caridad-ui.js.org](https://caridad-ui.js.org)
-
----
-
-## 📜 Licencia
-
-GPL-3.0
-
----
-
-## ✊ Filosofía
-
-> **Caridad UI nace desde la independencia, la humanidad y el poder del código abierto.**
-> Si construyes con propósito, esta librería es para ti.
+[https://caridad-ui.js.org](https://caridad-ui.js.org) _(próximamente)_
 
 ---
 
@@ -148,6 +135,4 @@ GPL-3.0
 ## 👤 Autor
 
 **Diego Toro Cárdenas**
-[@deCaldas](https://github.com/deCaldas) – Rap, Web y Resistencia desde Antioquia.
-
-**Sitio oficial:** [https://caridad-ui.js.org](https://caridad-ui.js.org) _(próximamente)_
+[@deCaldas](https://github.com/deCaldas).
