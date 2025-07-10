@@ -1,14 +1,27 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { glob } from 'glob';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const componentFiles = glob.sync('./src/components/*/*/.js')
+
+const entries = {
+  index: './src/index.js'
+}
+
+componentFiles.forEach(file => {
+  const name = path.basename(file, '.js');
+  const folder = path.basename(path.dirname(file));
+  entries[`components/${folder}/${name}`] = file;
+});
+
 export default {
-  entry: "./src/index.js",
+  entry: entries,
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "index.js",
+    filename: '[name].js',
     module: true,
     library: {
       type: "module"
@@ -18,6 +31,7 @@ export default {
   experiments: {
     outputModule: true
   },
+  devtool: 'source-map',
   resolve: {
     extensions: [".js"],
   },
@@ -31,6 +45,13 @@ export default {
           options: {
             presets: ["@babel/preset-env"]
           }
+        }
+      },
+      {
+        test: /\.css$/,
+        type: 'asset/resource',
+        generator: {
+          filename: '[path][name][ext]'
         }
       }
     ]
