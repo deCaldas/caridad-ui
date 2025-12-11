@@ -1,6 +1,94 @@
+/* ====================================================================== */
+/*  CARIDAD UI — TOKENS                                                   */
+/*  Filosofía: minimalista, contrastado, elegante y funcional.            */
+/* ====================================================================== */
+
 :root {
-  --primary-color: #6200ea;
-  --secondary-color: #03dac6;
-  --border-radius: 0.375rem;
-  --font-family: 'Inter', sans-serif;
+  /* ------------------------------------------------------- */
+  /*  COLORS                                                 */
+  /* ------------------------------------------------------- */
+  --color-bg: #0F0F0F;
+  --color-surface: #2A2A2A;
+  --color-surface-alt: #1A1A1A;
+  --color-text: #FFFFFF;
+  --color-text-muted: #C7C7C7;
+  --color-accent: #E53935;
+  --color-accent-dark: #B71C1C;
+  --color-neutral-beige: #F5E9D8;
+
+  /* ------------------------------------------------------- */
+  /*  TYPOGRAPHY                                             */
+  /* ------------------------------------------------------- */
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", monospace;
+  --font-sans: "Inter", "Söhne", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Font Sizes (clamp for responsive scale) */
+  --font-size-xs: clamp(0.75rem, 0.72rem + 0.1vw, 0.8rem);
+  --font-size-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.95rem);
+  --font-size-md: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --font-size-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --font-size-xl: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  --font-size-2xl: clamp(2.25rem, 2rem + 2vw, 3rem);
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
+
+  /* ------------------------------------------------------- */
+  /*  SPACING SCALE                                           */
+  /*  (4x baseline → minimalismo con aire)                    */
+  /* ------------------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* ------------------------------------------------------- */
+  /*  BORDERS & RADII                                        */
+  /* ------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ------------------------------------------------------- */
+  /*  BORDERS                                                */
+  /* ------------------------------------------------------- */
+  --border-width: 1px;
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  /* ------------------------------------------------------- */
+  /*  SHADOWS (sutileza, nada exagerado)                     */
+  /* ------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+  /* ------------------------------------------------------- */
+  /*  MOTION                                                  */
+  /* ------------------------------------------------------- */
+  --motion-fast: 150ms ease;
+  --motion-normal: 200ms ease;
+  --motion-slow: 300ms ease;
+
+  /* ------------------------------------------------------- */
+  /*  ALIASES (for backwards compatibility)                  */
+  /* ------------------------------------------------------- */
+  --font-family: var(--font-sans);
+  --font-family-mono: var(--font-mono);
+
+  --font-size-base: var(--font-size-md);
+
+  --spacing-xs: var(--space-2);
+  --spacing-sm: var(--space-3);
+  --spacing-md: var(--space-4);
+  --spacing-lg: var(--space-6);
+  --spacing-xl: var(--space-8);
+
+  --color-primary: var(--color-accent);
+  --color-bg-inverse: var(--color-surface);
 }

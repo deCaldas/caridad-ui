@@ -1,6 +1,15 @@
 // src/index.js
-import './components/e-header/e-header.js';
-
-// Futuro: importa más componentes aquí
-// import './components/e-button/e-button.js';
-// import './components/e-card/e-card.js';
+// Import all components
+import './components/button/c-button.js';
+import './components/card/c-card.js';
+import './components/contact-form/c-contact-form.js';
+import './components/cta/c-cta.js';
+import './components/feature/c-feature.js';
+import './components/footer/c-footer.js';
+import './components/grid/c-grid.js';
+import './components/header/c-header.js';
+import './components/hero/c-hero.js';
+import './components/input/c-input.js';
+import './components/navbar/c-navbar.js';
+import './components/section/c-section.js';
+import './components/select/c-select.js';

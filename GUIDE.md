@@ -2,7 +2,7 @@
 
 # 📐 Caridad UI — Web Components Design System
 
-> Un sistema de diseño basado en Web Components, inspirado en la identidad de Diego "de Caldas" Toro Cárdenas y el poder del desarrollo nativo.
+> Un sistema de diseño basado en Web Components, inspirado en la identidad de Diego Toro Cárdenas y el poder del desarrollo nativo.
 
 ---
 
@@ -24,13 +24,13 @@
 | Nombre      | Tag            | Descripción                  |
 |-------------|----------------|------------------------------|
 | Header      | `<e-header>`   | Cabecera con slots y nav     |
-| ...         | *(próximamente)* |                            |
+| ...         |*(próximamente)*|                              |
 
 ---
 
 ## 🧪 Testing
 
-Utilizamos [Web Test Runner](https://modern-web.dev/docs/test-runner/) para pruebas unitarias.
+... *(próximamente)*
 
 ```bash
 npm run test
@@ -41,20 +41,13 @@ npm run test
 ## 🛠️ Instalación y Uso
 
 ```bash
-npm install caridadui
+npm install caridad-ui
 ```
 
 Importa el componente en tu proyecto:
 
 ```js
-import 'caridadui/e-header';
+import 'caridad-ui/e-header';
 ```
-
----
-
-## 🌐 Créditos
-
-Creado con pasión por **Diego Toro Cárdenas**
-GitHub: [@deCaldas](https://github.com/deCaldas)
 
 ---

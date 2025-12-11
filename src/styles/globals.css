@@ -1,19 +1,27 @@
-*
-{
+/* global.css */
+@import "./tokens.css";
+
+/* Reset básico del sistema */
+*,
+*::before,
+*::after {
   margin: 0;
-  padding: 0
+  padding: 0;
+  box-sizing: border-box;
 }
-body
-{
-  display: flex;
-  justify-content: center;
-  place-items: center;
-  align-items: center;
-  text-align: center;
+
+/* Mejor comportamiento tipográfico */
+html {
+  font-size: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Estilos base globales */
+body {
   width: 100%;
   min-width: 320px;
   min-height: 100vh;
-  font-family: monospace;
-  color:  #c0ca32;
-  background-color: #000;
+
+  line-height: 1.5;
 }

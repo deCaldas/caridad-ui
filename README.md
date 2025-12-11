@@ -85,7 +85,7 @@ design-system/
 ├── public/
 │   └── assets/
 ├── tests/
-|    └── index.html     <!-- Demo local -->
+|    └── test.html      <!-- Demo local -->
 ├── .babelrc            <!-- Babel para transpilar JS moderno -->
 ├── .gitignore
 ├── package-lock.json
@@ -133,6 +133,6 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 
 ## 👤 Autor
 
-**Diego Toro Cárdenas**
+Hecho con ❤️ por **Diego Toro Cárdenas**
 
-[@deCaldas](https://github.com/deCaldas).
+GitHub: [@deCaldas](https://github.com/deCaldas).
