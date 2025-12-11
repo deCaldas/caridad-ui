@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caridad UI — Web Components Modernos</title>
+
+    <!-- Metadata SEO -->
+    <meta name="description"
+        content="Caridad UI es un sistema de Web Components modernos, accesibles y sin dependencias. Construye interfaces elegantes y rápidas con HTML puro." />
+    <meta name="author" content="Armando Toro Cárdenas" />
+
+    <!-- Favicon opcional -->
+    <link rel="icon" href="./dist/favicon.png" />
+
+    <!-- Tokens (compilados en dist) -->
+    <link rel="stylesheet" href="./dist/src/styles/tokens.css">
+
+    <!-- Reset + globals -->
+    <link rel="stylesheet" href="./dist/src/styles/globals.css">
+
+    <!-- Web Components compilados -->
+    <script type="module" src="./dist/index.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-family);
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-9);
+            padding-bottom: var(--space-9);
+        }
+
+        .section-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-7) var(--space-4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <c-navbar brand="Caridad UI">
+        <a slot="item" href="#inicio">Inicio</a>
+        <a slot="item" href="#features">Características</a>
+        <a slot="item" href="#componentes">Componentes</a>
+        <a slot="item" href="#contacto">Contacto</a>
+        <button onclick="toggleTheme()">Cambiar tema</button>
+
+        <script>
+            const toggleTheme = () => {
+                const r = document.documentElement;
+                r.dataset.theme = r.dataset.theme === "dark" ? "light" : "dark";
+            };
+        </script>
+    </c-navbar>
+
+    <main>
+
+        <!-- HERO -->
+        <div id="inicio" class="section-wrapper">
+            <c-hero layout="centered">
+                <h1 slot="title">Construye interfaces hermosas con Web Components</h1>
+                <p slot="subtitle">Modernos • Accesibles • Sin dependencias • Listos para producción</p>
+                <p slot="description">
+                    Caridad UI es un sistema de diseño basado completamente en estándares web.
+                    Sin frameworks, sin lock-in. Usa HTML y crea interfaces flexibles, rápidas y elegantes.
+                </p>
+
+                <div slot="cta">
+                    <c-button variant="primary" size="lg">Empezar</c-button>
+                    <c-button variant="outline" size="lg">GitHub</c-button>
+                </div>
+            </c-hero>
+        </div>
+
+        <!-- FEATURES -->
+        <div id="features" class="section-wrapper">
+            <c-section>
+                <h2 slot="title">Características Principales</h2>
+                <p slot="subtitle">Un sistema simple, moderno y completamente extensible</p>
+
+                <c-grid gap="lg" min="260px">
+                    <c-feature icon="⚡" title="Rápido y Liviano">
+                        Componentes nativos optimizados: sin runtime adicional.
+                    </c-feature>
+
+                    <c-feature icon="🎨" title="Personalizable">
+                        Tokens CSS que adaptan el sistema a cualquier marca.
+                    </c-feature>
+
+                    <c-feature icon="♿" title="Accesible">
+                        Buenas prácticas ARIA integradas desde el diseño.
+                    </c-feature>
+
+                    <c-feature icon="🔧" title="Fácil de Usar">
+                        Simplemente importa el script y utiliza las etiquetas.
+                    </c-feature>
+
+                    <c-feature icon="📱" title="Responsive">
+                        Escalado fluido y componentes flexibles por defecto.
+                    </c-feature>
+
+                    <c-feature icon="🌐" title="Estándares Web">
+                        Basado 100% en Web Components nativos.
+                    </c-feature>
+                </c-grid>
+            </c-section>
+        </div>
+
+        <!-- COMPONENTES -->
+        <div id="componentes" class="section-wrapper">
+            <c-section variant="primary">
+                <h2 slot="title">Componentes Disponibles</h2>
+                <p slot="subtitle">Crea landing pages completas en minutos</p>
+
+                <c-grid gap="lg" min="300px">
+
+                    <c-card>
+                        <h3 slot="header">Navegación</h3>
+                        <p><strong>c-navbar</strong> — Barra responsive.</p>
+                        <p><strong>c-header</strong>, <strong>c-footer</strong></p>
+                        <c-button slot="footer" variant="outline" size="sm">Ver</c-button>
+                    </c-card>
+
+                    <c-card>
+                        <h3 slot="header">Contenido</h3>
+                        <p>c-hero, c-section, c-card</p>
+                        <c-button slot="footer" variant="outline" size="sm">Ver</c-button>
+                    </c-card>
+
+                    <c-card>
+                        <h3 slot="header">Formularios</h3>
+                        <p>c-input, c-select, c-checkbox, c-form</p>
+                        <c-button slot="footer" variant="outline" size="sm">Ver</c-button>
+                    </c-card>
+
+                </c-grid>
+            </c-section>
+        </div>
+
+        <!-- CTA FINAL -->
+        <div class="section-wrapper">
+            <c-cta>
+                <h2 slot="heading">¿Listo para comenzar?</h2>
+                <p slot="description">
+                    Instala Caridad UI y crea interfaces más rápido con HTML puro.
+                </p>
+
+                <div slot="buttons">
+                    <c-button variant="primary" size="lg">Instalar vía NPM</c-button>
+                    <c-button variant="ghost" size="lg">Repositorio en GitHub</c-button>
+                </div>
+            </c-cta>
+        </div>
+
+        <!-- CONTACTO -->
+        <div id="contacto" class="section-wrapper">
+            <c-section>
+                <h2 slot="title">Contáctanos</h2>
+                <p slot="subtitle">¿Preguntas o ideas? Escríbenos.</p>
+
+                <c-form id="contact-form">
+                    <c-input name="name" label="Nombre" required></c-input>
+
+                    <c-input type="email" name="email" label="Correo" icon-left="mail" required></c-input>
+
+                    <c-select name="topic" label="Motivo">
+                        <option value="soporte">Soporte</option>
+                        <option value="colaborar">Colaborar</option>
+                        <option value="otro">Otro</option>
+                    </c-select>
+
+                    <c-input multiline name="message" label="Mensaje" required></c-input>
+
+                    <c-button slot="submit" type="submit" variant="primary" size="lg">
+                        Enviar
+                    </c-button>
+                </c-form>
+            </c-section>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <c-footer>
+        <div slot="logo">
+            <strong>Caridad UI</strong>
+            <p style="font-size: var(--font-size-sm); opacity: 0.75">
+                Web Components modernos para todos
+            </p>
+        </div>
+
+        <div slot="links">
+            <div class="footer-section-title">Enlaces</div>
+            <div class="footer-links">
+                <a href="#inicio">Inicio</a>
+                <a href="#features">Características</a>
+                <a href="#componentes">Componentes</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </div>
+
+        <div slot="social">
+            <div class="footer-section-title">Social</div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/de-caldas" target="_blank">💼</a>
+            </div>
+        </div>
+
+        <p slot="copyright">
+            © 2025 Caridad UI — Hecho con ❤️ por Armando Toro Cárdenas / deCaldas
+        </p>
+    </c-footer>
+
+</body>
+
+</html>
