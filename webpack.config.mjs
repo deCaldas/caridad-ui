@@ -5,7 +5,7 @@ import { glob } from 'glob';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const componentFiles = glob.sync('./src/components/*/*/.js')
+const componentFiles = glob.sync('./src/components/**/*/.js')
 
 const entries = {
   index: './src/index.js'

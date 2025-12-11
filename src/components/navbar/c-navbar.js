@@ -1,12 +1,12 @@
 export class CNavbar extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-        this.render();
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.render();
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  render() {
+    this.shadowRoot.innerHTML = `
       <style>
         nav {
           width: 100%;
@@ -36,7 +36,7 @@ export class CNavbar extends HTMLElement {
         </div>
       </nav>
     `;
-    }
+  }
 }
 
 customElements.define("c-navbar", CNavbar);

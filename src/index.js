@@ -13,3 +13,8 @@ import './components/input/c-input.js';
 import './components/navbar/c-navbar.js';
 import './components/section/c-section.js';
 import './components/select/c-select.js';
+import './components/form/c-checkbox.js';
+import './components/form/c-field.js';
+import './components/form/c-label.js';
+import './components/form/c-switch.js';
+import './components/form/c-textarea.js';
