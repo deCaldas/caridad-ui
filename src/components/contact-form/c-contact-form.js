@@ -34,9 +34,6 @@ template.innerHTML = `
       }
     }
 
-    /* ---------------------------- */
-    /* Mensajes de estado           */
-    /* ---------------------------- */
     .msg {
       padding: var(--space-4);
       border-radius: var(--radius-md);
@@ -48,13 +45,13 @@ template.innerHTML = `
     }
 
     .msg.success {
-      background: rgba(110, 231, 183, 0.08); /* success soft surface */
-      color: #6ee7b7; /* success text (puedes tokenizar luego) */
+      background: rgba(110, 231, 183, 0.08);
+      color: #6ee7b7;
       border-color: #6ee7b7;
     }
 
     .msg.error {
-      background: rgba(252, 165, 165, 0.08); /* error soft surface */
+      background: rgba(252, 165, 165, 0.08);
       color: #fca5a5;
       border-color: #fca5a5;
     }
@@ -62,16 +59,12 @@ template.innerHTML = `
     :host([state="success"]) .msg.success { display: block; }
     :host([state="error"])   .msg.error   { display: block; }
 
-    /* ---------------------------- */
-    /* Acciones                     */
-    /* ---------------------------- */
     .actions {
       display: flex;
       justify-content: center;
       padding-top: var(--space-3);
     }
 
-    /* Animación suave del formulario */
     form,
     .msg {
       transition: all var(--motion-normal);
@@ -101,14 +94,60 @@ export class CContactForm extends HTMLElement {
 
   constructor() {
     super();
+
+    // Rate limiting interno (3s)
+    this._lastSubmit = 0;
+    this._submitThrottle = 3000;
+
     this._internals = this.attachInternals();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.form = this.shadowRoot.querySelector('form');
     this.form.addEventListener('submit', this._onSubmit.bind(this));
+
+    // Blindar slots contra XSS
+    this._protectSlots();
   }
 
+  // -------------------------
+  // 🔰 Protección Anti-XSS para Slots
+  // -------------------------
+  _sanitizeNode(node) {
+    if (!node) return null;
+
+    // Elementos prohibidos
+    const forbiddenTags = ['script', 'iframe', 'object', 'embed', 'link'];
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (forbiddenTags.includes(node.tagName.toLowerCase())) {
+        node.remove();
+        return null;
+      }
+
+      // Remover atributos on*
+      [...node.attributes].forEach(attr => {
+        if (attr.name.startsWith('on')) node.removeAttribute(attr.name);
+      });
+    }
+
+    // Sanitizar hijos recursivamente
+    [...node.childNodes].forEach(child => this._sanitizeNode(child));
+
+    return node;
+  }
+
+  _protectSlots() {
+    const slots = this.shadowRoot.querySelectorAll('slot');
+    slots.forEach(slot => {
+      slot.addEventListener('slotchange', () => {
+        slot.assignedNodes().forEach(n => this._sanitizeNode(n));
+      });
+    });
+  }
+
+  // -------------------------
+  // Observación de atributos
+  // -------------------------
   static get observedAttributes() {
     return ['state'];
   }
@@ -132,6 +171,9 @@ export class CContactForm extends HTMLElement {
     }
   }
 
+  // -------------------------
+  // API del formulario
+  // -------------------------
   get value() {
     return Object.fromEntries(new FormData(this.form));
   }
@@ -141,8 +183,19 @@ export class CContactForm extends HTMLElement {
     this.removeAttribute('state');
   }
 
+  // -------------------------
+  // Submit + Rate Limiting
+  // -------------------------
   _onSubmit(e) {
     e.preventDefault();
+
+    // Rate limiting
+    const now = Date.now();
+    if (now - this._lastSubmit < this._submitThrottle) {
+      this.setAttribute('state', 'error');
+      return;
+    }
+    this._lastSubmit = now;
 
     if (!this.form.checkValidity()) {
       this.form.reportValidity();

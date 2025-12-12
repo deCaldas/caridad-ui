@@ -13,13 +13,38 @@ export class CSection extends HTMLElement {
     this.render();
   }
 
-  render() {
-    const variant = this.getAttribute('variant') || 'default';
-    const padding = this.getAttribute('padding') || 'normal';
+  // Sanitización genérica (fallback)
+  sanitize(value) {
+    if (!value) return '';
+    return value.replace(/[&<>"']/g, (char) => {
+      const entities = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return entities[char];
+    });
+  }
 
-    /* ------------------------------------------------------
-       BACKGROUNDS (caridad ui)
-    ------------------------------------------------------ */
+  render() {
+    /* LISTAS BLANCAS: defensa primaria */
+    const VALID_VARIANTS = ['default', 'primary', 'secondary', 'accent'];
+    const VALID_PADDINGS = ['none', 'small', 'normal', 'large'];
+
+    const rawVariant = this.getAttribute('variant');
+    const rawPadding = this.getAttribute('padding');
+
+    const variant = VALID_VARIANTS.includes(rawVariant)
+      ? rawVariant
+      : 'default';
+
+    const padding = VALID_PADDINGS.includes(rawPadding)
+      ? rawPadding
+      : 'normal';
+
+    /* Mapas seguros */
     const backgrounds = {
       default: 'var(--color-bg)',
       primary: 'var(--color-surface)',
@@ -27,21 +52,20 @@ export class CSection extends HTMLElement {
       accent: 'var(--color-accent)'
     };
 
-    /* ------------------------------------------------------
-       PADDINGS (caridad ui spacing scale)
-    ------------------------------------------------------ */
     const paddings = {
       none: '0',
-      small: 'var(--space-5) var(--space-4)',      // 24px vertical / 16px horizontal
-      normal: 'var(--space-7) var(--space-5)',     // 48px vertical / 24px horizontal
-      large: 'var(--space-9) var(--space-6)'       // 96px vertical / 32px horizontal
+      small: 'var(--space-5) var(--space-4)',
+      normal: 'var(--space-7) var(--space-5)',
+      large: 'var(--space-9) var(--space-6)'
     };
 
     const textColor =
       variant === 'accent'
-        ? 'var(--color-text)' /* por contraste, tu rojo mantiene blanco */
+        ? 'var(--color-text)'
         : 'var(--color-text)';
 
+    // IMPORTANTE: acá ya no hay riesgo porque variant/padding
+    // jamás pueden contener contenido ejecutable.
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -67,7 +91,6 @@ export class CSection extends HTMLElement {
           margin-bottom: var(--space-7);
         }
 
-        /* Title Slot */
         ::slotted([slot="title"]) {
           font-family: var(--font-mono);
           font-size: var(--font-size-2xl);
@@ -76,7 +99,6 @@ export class CSection extends HTMLElement {
           color: ${textColor};
         }
 
-        /* Subtitle Slot */
         ::slotted([slot="subtitle"]) {
           font-family: var(--font-sans);
           font-size: var(--font-size-lg);

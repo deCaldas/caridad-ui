@@ -13,8 +13,21 @@ export class CHero extends HTMLElement {
     this.render();
   }
 
+  // Lista blanca: solo permitimos layouts válidos
+  static VALID_LAYOUTS = ["centered", "split"];
+
   render() {
-    const layout = this.getAttribute("layout") || "centered";
+    const rawLayout = this.getAttribute("layout");
+
+    // Si no es un layout válido, caemos a "centered"
+    const layout = CHero.VALID_LAYOUTS.includes(rawLayout)
+      ? rawLayout
+      : "centered";
+
+    // NO interpolamos HTML no controlado
+    // Solo usamos `layout` dentro de className controlado (clase CSS)
+
+    const hasSplit = layout === "split";
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -23,24 +36,18 @@ export class CHero extends HTMLElement {
           font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
         }
 
-        /* Hero Section */
         section {
           padding: var(--space-7, 64px) var(--space-5, 24px);
-
-          /* Gradiente con tokens (editable por el consumidor) */
           background: linear-gradient(
             135deg,
             var(--hero-bg-start, var(--color-accent, #E53935)) 0%,
             var(--hero-bg-end, var(--color-accent-dark, #B71C1C)) 100%
           );
-
           color: var(--color-text, #fff);
           min-height: 500px;
-
           display: flex;
           align-items: center;
           justify-content: center;
-
           transition: background var(--motion-normal, 200ms ease);
         }
 
@@ -50,7 +57,6 @@ export class CHero extends HTMLElement {
           margin: 0 auto;
         }
 
-        /* Layouts */
         .content.centered {
           text-align: center;
           display: flex;
@@ -73,7 +79,6 @@ export class CHero extends HTMLElement {
           }
         }
 
-        /* Text block */
         .text-content {
           display: flex;
           flex-direction: column;
@@ -102,7 +107,6 @@ export class CHero extends HTMLElement {
           margin: 0;
         }
 
-        /* CTA zone */
         .cta-buttons {
           display: flex;
           gap: var(--space-4, 16px);
@@ -113,7 +117,6 @@ export class CHero extends HTMLElement {
           justify-content: center;
         }
 
-        /* Media slot */
         .media-content {
           display: flex;
           align-items: center;
@@ -123,10 +126,8 @@ export class CHero extends HTMLElement {
         ::slotted([slot="media"]) {
           max-width: 100%;
           height: auto;
-
           border-radius: var(--radius-lg, 12px);
           box-shadow: var(--shadow-lg, 0 8px 20px rgba(0,0,0,0.5));
-
           transition: transform var(--motion-normal, 200ms ease),
                       box-shadow var(--motion-normal, 200ms ease);
         }
@@ -147,10 +148,8 @@ export class CHero extends HTMLElement {
                 <slot name="cta"></slot>
               </div>
             </div>
-            ${layout === "split"
-        ? '<div class="media-content"><slot name="media"></slot></div>'
-        : ""
-      }
+
+            ${hasSplit ? `<div class="media-content"><slot name="media"></slot></div>` : ""}
           </div>
         </div>
       </section>

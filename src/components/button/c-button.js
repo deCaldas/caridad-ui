@@ -13,10 +13,28 @@ export class CButton extends HTMLElement {
     this.render();
   }
 
+  sanitizeAttribute(value) {
+    if (!value) return '';
+    return value.replace(/[&<>"']/g, (char) => {
+      const entities = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      };
+      return entities[char];
+    });
+  }
+
   render() {
-    const variant = this.getAttribute('variant') || 'primary';
-    const size = this.getAttribute('size') || 'md';
+    const variant = this.sanitizeAttribute(this.getAttribute('variant') || 'primary');
+    const size = this.sanitizeAttribute(this.getAttribute('size') || 'md');
     const disabled = this.hasAttribute('disabled');
+
+    // Validar que el variant esté en la lista blanca
+    const VALID_VARIANTS = ['primary', 'secondary', 'outline', 'ghost'];
+    const validVariant = VALID_VARIANTS.includes(variant) ? variant : 'primary';
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -138,7 +156,7 @@ export class CButton extends HTMLElement {
       </style>
 
       <button 
-        class="${variant} ${size}"
+        class="${validVariant} ${size}"
         ${disabled ? 'disabled' : ''}
         part="button"
       >

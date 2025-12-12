@@ -13,9 +13,38 @@ export class CGrid extends HTMLElement {
     this.render();
   }
 
+  // --- Seguridad ---
+  sanitizeCols(value) {
+    // Solo acepta números entre 1 y 12
+    const num = parseInt(value, 10);
+    if (Number.isInteger(num) && num >= 1 && num <= 12) return num;
+    return 3;
+  }
+
+  sanitizeGap(value) {
+    // Lista blanca basada en tokens de spacing de tu design system
+    const allowed = [
+      "var(--space-1)",
+      "var(--space-2)",
+      "var(--space-3)",
+      "var(--space-4)",
+      "var(--space-5)",
+      "var(--space-6)",
+      "0",
+      "4px",
+      "8px",
+      "12px",
+      "16px",
+    ];
+    return allowed.includes(value) ? value : "var(--space-6)";
+  }
+
   render() {
-    const cols = this.getAttribute("cols") || "3";
-    const gap = this.getAttribute("gap") || "var(--space-6)";
+    const rawCols = this.getAttribute("cols");
+    const rawGap = this.getAttribute("gap");
+
+    const cols = this.sanitizeCols(rawCols || "3");
+    const gap = this.sanitizeGap(rawGap || "var(--space-6)");
 
     this.shadowRoot.innerHTML = `
       <style>

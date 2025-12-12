@@ -1,3 +1,18 @@
+// Función de sanitización básica para atributos
+function sanitizeAttribute(value) {
+  if (!value) return "";
+  return value.replace(/[&<>"']/g, (char) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[char];
+  });
+}
+
 export class CFeature extends HTMLElement {
   constructor() {
     super();
@@ -14,9 +29,25 @@ export class CFeature extends HTMLElement {
   }
 
   render() {
-    const layout = this.getAttribute("layout") || "vertical";
-    const iconStyle = this.getAttribute("icon-style") || "circle";
+    // Leer atributos
+    const rawLayout = this.getAttribute("layout") || "vertical";
+    const rawIconStyle = this.getAttribute("icon-style") || "circle";
 
+    // Sanitizar atributos
+    const layout = sanitizeAttribute(rawLayout);
+    const iconStyle = sanitizeAttribute(rawIconStyle);
+
+    // Validar atributos contra lista blanca
+    const VALID_LAYOUTS = ["vertical", "horizontal"];
+    const VALID_ICON_STYLES = ["circle", "square", "none"];
+
+    const safeLayout =
+      VALID_LAYOUTS.includes(layout) ? layout : "vertical";
+
+    const safeIconStyle =
+      VALID_ICON_STYLES.includes(iconStyle) ? iconStyle : "circle";
+
+    // Render seguro
     this.shadowRoot.innerHTML = `
       <style>
         @import "/src/styles/tokens.css";
@@ -29,15 +60,11 @@ export class CFeature extends HTMLElement {
 
         .feature {
           display: flex;
-          flex-direction: ${layout === "horizontal" ? "row" : "column"};
+          flex-direction: ${safeLayout === "horizontal" ? "row" : "column"};
           gap: var(--space-5);
-          align-items: ${layout === "horizontal" ? "flex-start" : "center"};
-          text-align: ${layout === "horizontal" ? "left" : "center"};
+          align-items: ${safeLayout === "horizontal" ? "flex-start" : "center"};
+          text-align: ${safeLayout === "horizontal" ? "left" : "center"};
         }
-
-        /* ------------------------------ */
-        /* ICON WRAPPER                   */
-        /* ------------------------------ */
 
         .icon-wrapper {
           flex-shrink: 0;
@@ -70,10 +97,6 @@ export class CFeature extends HTMLElement {
           box-shadow: none;
         }
 
-        /* ------------------------------ */
-        /* CONTENT SLOTS                  */
-        /* ------------------------------ */
-
         .content {
           flex: 1;
         }
@@ -97,7 +120,7 @@ export class CFeature extends HTMLElement {
       </style>
 
       <div class="feature" part="feature">
-        <div class="icon-wrapper ${iconStyle}">
+        <div class="icon-wrapper ${safeIconStyle}">
           <slot name="icon">✨</slot>
         </div>
 

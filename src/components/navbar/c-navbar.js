@@ -2,11 +2,20 @@ export class CNavbar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+  }
+
+  connectedCallback() {
+    // Limpia atributos inseguros si alguien intenta inyectarlos
+    const UNSAFE_ATTRS = ["onerror", "onload", "onclick", "onmouseover"];
+    UNSAFE_ATTRS.forEach(attr => {
+      if (this.hasAttribute(attr)) this.removeAttribute(attr);
+    });
+
     this.render();
   }
 
   render() {
-    this.shadowRoot.innerHTML = `
+    const template = `
       <style>
         nav {
           width: 100%;
@@ -36,6 +45,8 @@ export class CNavbar extends HTMLElement {
         </div>
       </nav>
     `;
+
+    this.shadowRoot.innerHTML = template;
   }
 }
 
