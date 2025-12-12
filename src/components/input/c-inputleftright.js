@@ -1,15 +1,21 @@
-export class CInput extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-        this.render();
-    }
+export class CInputLeftRight extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.render();
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  render() {
+    const VALID_TYPES = ["text", "email", "password", "search", "number", "tel", "url"];
+
+    const rawType = this.getAttribute("type");
+    const type = VALID_TYPES.includes(rawType) ? rawType : "text";
+
+    const placeholder = sanitize(this.getAttribute("placeholder"));
+
+    this.shadowRoot.innerHTML = `
       <style>
         :host { display: block; }
-
         .wrapper {
           position: relative;
           display: flex;
@@ -20,11 +26,7 @@ export class CInput extends HTMLElement {
           padding: 0 var(--space-4);
           transition: border var(--motion-fast);
         }
-
-        .wrapper:focus-within {
-          border-color: var(--color-accent);
-        }
-
+        .wrapper:focus-within { border-color: var(--color-accent); }
         input {
           flex: 1;
           background: transparent;
@@ -35,7 +37,6 @@ export class CInput extends HTMLElement {
           outline: none;
           font-family: var(--font-sans);
         }
-
         .icon {
           display: flex;
           align-items: center;
@@ -48,12 +49,32 @@ export class CInput extends HTMLElement {
 
       <div class="wrapper">
         <slot name="icon-left" class="icon"></slot>
-        <input type="${this.getAttribute("type") || "text"}"
-               placeholder="${this.getAttribute("placeholder") || ""}"/>
         <slot name="icon-right" class="icon"></slot>
       </div>
     `;
-    }
+
+    const wrapper = this.shadowRoot.querySelector(".wrapper");
+
+    // Crear input vía DOM (seguro)
+    const input = document.createElement("input");
+    input.type = type;
+    input.placeholder = placeholder;
+
+    // Insertar input en medio de los dos slots
+    const rightSlot = wrapper.querySelector('slot[name="icon-right"]');
+    wrapper.insertBefore(input, rightSlot);
+  }
 }
 
-customElements.define("c-input", CInput);
+function sanitize(value) {
+  if (!value) return "";
+  return value.replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
+
+customElements.define("c-input-left-right", CInputLeftRight);

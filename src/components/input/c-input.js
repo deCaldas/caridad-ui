@@ -1,3 +1,8 @@
+function sanitizeAttr(value) {
+  if (typeof value !== 'string') return '';
+  return value.replace(/[<>"']/g, '');
+}
+
 export class CInput extends HTMLElement {
   static formAssociated = true;
 
@@ -98,15 +103,15 @@ export class CInput extends HTMLElement {
 
   connectedCallback() {
     if (this.hasAttribute('type')) {
-      this._input.type = this.getAttribute('type');
+      this._input.type = sanitizeAttr(this.getAttribute('type'));
     }
 
     if (this.hasAttribute('placeholder')) {
-      this._input.placeholder = this.getAttribute('placeholder');
+      this._input.placeholder = sanitizeAttr(this.getAttribute('placeholder'));
     }
 
     if (this.hasAttribute('value')) {
-      this._input.value = this.getAttribute('value');
+      this._input.value = sanitizeAttr(this.getAttribute('value'));
     }
 
     if (this.hasAttribute('required')) {
