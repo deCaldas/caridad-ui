@@ -1,168 +1,84 @@
 export class CButton extends HTMLElement {
+  static get observedAttributes() {
+    return ['variant', 'size', 'disabled', 'icon-left', 'icon-right'];
+  }
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
     this.render();
   }
 
-  static get observedAttributes() {
-    return ['variant', 'size', 'disabled'];
-  }
-
   attributeChangedCallback() {
     this.render();
   }
 
-  sanitizeAttribute(value) {
-    if (!value) return '';
-    return value.replace(/[&<>"']/g, (char) => {
-      const entities = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-      };
-      return entities[char];
-    });
-  }
-
   render() {
-    const variant = this.sanitizeAttribute(this.getAttribute('variant') || 'primary');
-    const size = this.sanitizeAttribute(this.getAttribute('size') || 'md');
+    const VALID_VARIANTS = ['primary', 'secondary', 'outline', 'ghost'];
+    const VALID_SIZES = ['sm', 'md', 'lg'];
+    const VALID_ICONS = [
+      'search', 'arrow-right', 'arrow-left',
+      'plus', 'check', 'x', 'star',
+      'heart', 'download', 'upload'
+    ];
+
+    const variant = VALID_VARIANTS.includes(this.getAttribute('variant'))
+      ? this.getAttribute('variant')
+      : 'primary';
+
+    const size = VALID_SIZES.includes(this.getAttribute('size'))
+      ? this.getAttribute('size')
+      : 'md';
+
     const disabled = this.hasAttribute('disabled');
 
-    // Validar que el variant esté en la lista blanca
-    const VALID_VARIANTS = ['primary', 'secondary', 'outline', 'ghost'];
-    const validVariant = VALID_VARIANTS.includes(variant) ? variant : 'primary';
-
     this.shadowRoot.innerHTML = `
-      <style>
-        @import "/src/styles/tokens.css";
-
-        :host {
-          display: inline-block;
-        }
-
-        button {
-          font-family: var(--font-mono);
-          font-weight: 600;
-          border-radius: var(--radius-md);
-          cursor: pointer;
-          transition: background var(--motion-fast), 
-                      color var(--motion-fast),
-                      box-shadow var(--motion-fast),
-                      transform var(--motion-fast);
-
-          border: var(--border-width) solid transparent;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: var(--space-2);
-          line-height: 1;
-          background: transparent;
-          color: var(--color-text);
-        }
-
-        button:focus-visible {
-          outline: 2px solid var(--color-accent);
-          outline-offset: 2px;
-        }
-
-        /* ------------------------- */
-        /* Sizes (Caridad UI scale) */
-        /* ------------------------- */
-
-        button.sm {
-          padding: var(--space-2) var(--space-4);
-          font-size: var(--font-size-sm);
-        }
-
-        button.md {
-          padding: var(--space-3) var(--space-5);
-          font-size: var(--font-size-md);
-        }
-
-        button.lg {
-          padding: var(--space-4) var(--space-6);
-          font-size: var(--font-size-lg);
-        }
-
-        /* ------------------------- */
-        /* Variants                  */
-        /* ------------------------- */
-
-        /* PRIMARY → Usa color-accent */
-        button.primary {
-          background: var(--color-accent);
-          color: var(--color-text);
-          border-color: var(--color-accent);
-        }
-
-        button.primary:hover:not(:disabled) {
-          background: var(--color-accent-dark);
-          border-color: var(--color-accent-dark);
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-md);
-        }
-
-        /* SECONDARY → beige / surface contrast */
-        button.secondary {
-          background: var(--color-neutral-beige);
-          color: var(--color-bg);
-          border-color: var(--color-neutral-beige);
-        }
-
-        button.secondary:hover:not(:disabled) {
-          opacity: 0.9;
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-md);
-        }
-
-        /* OUTLINE */
-        button.outline {
-          background: transparent;
-          color: var(--color-accent);
-          border-color: var(--color-accent);
-        }
-
-        button.outline:hover:not(:disabled) {
-          background: var(--color-accent);
-          color: var(--color-text);
-        }
-
-        /* GHOST */
-        button.ghost {
-          background: transparent;
-          color: var(--color-text-muted);
-          border-color: transparent;
-        }
-
-        button.ghost:hover:not(:disabled) {
-          background: var(--color-surface-alt);
-        }
-
-        /* DISABLED */
-        button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          transform: none;
-          box-shadow: none;
-        }
-
-        button:active:not(:disabled) {
-          transform: translateY(0);
-        }
-      </style>
-
-      <button 
-        class="${validVariant} ${size}"
-        ${disabled ? 'disabled' : ''}
-        part="button"
-      >
-        <slot></slot>
-      </button>
+      <style>@import "/src/styles/tokens.css";</style>
+      <button part="button"></button>
     `;
+
+    const button = this.shadowRoot.querySelector('button');
+    button.classList.add(variant, size);
+    if (disabled) button.disabled = true;
+
+    // LEFT ICON
+    const iconLeft = this.getAttribute('icon-left');
+    if (VALID_ICONS.includes(iconLeft)) {
+      const span = document.createElement('span');
+      span.className = 'icon icon-left';
+      span.part = 'icon-left';
+      span.textContent = this.iconChar(iconLeft);
+      button.appendChild(span);
+    }
+
+    // SLOT
+    const slot = document.createElement('slot');
+    button.appendChild(slot);
+
+    // RIGHT ICON
+    const iconRight = this.getAttribute('icon-right');
+    if (VALID_ICONS.includes(iconRight)) {
+      const span = document.createElement('span');
+      span.className = 'icon icon-right';
+      span.part = 'icon-right';
+      span.textContent = this.iconChar(iconRight);
+      button.appendChild(span);
+    }
+  }
+
+  iconChar(name) {
+    return {
+      search: '🔍',
+      'arrow-right': '→',
+      'arrow-left': '←',
+      plus: '+',
+      check: '✓',
+      x: '✕',
+      star: '★',
+      heart: '❤',
+      download: '↓',
+      upload: '↑'
+    }[name];
   }
 }
 
