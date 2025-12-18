@@ -19,7 +19,7 @@ const components = fs.readdirSync(componentsDir, { withFileTypes: true })
 .map(dirent => dirent.name);
 
 components.forEach(name => {
-    exportsMap['./${name}'] = `./dist/components/&{name}/&{name}.js`;
+	exportsMap[`./${name}`] = `./dist/components/${name}/${name}.js`;
 });
 
 pkg.exports = exportsMap;

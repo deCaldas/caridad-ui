@@ -1,24 +1,14 @@
-/* ====================================================================== */
-/*  CARIDAD UI — DESIGN TOKENS                                            */
-/* ====================================================================== */
-
 :root {
-  /* ---------- PALETA BASE (LIGHT MODE) ---------- */
-  --color-bg: #ffffff;
-  --color-surface: #f5f5f5;
-  --color-surface-alt: #e8e8e8;
-
-  --color-text: #111111;
-  --color-text-muted: #444444;
-
-  --color-accent: #e53935;
-  --color-accent-dark: #b71c1c;
-
-  --color-neutral-beige: #f5e9d8;
 
   /* ---------- TIPOGRAFÍA ---------- */
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-sans:
+    "Inter",
+    system-ui,
+    sans-serif;
+
+  --font-mono:
+    "JetBrains Mono",
+    monospace;
 
   --font-size-xs: clamp(0.75rem, 0.72rem + 0.1vw, 0.8rem);
   --font-size-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.95rem);
@@ -31,16 +21,9 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.65;
 
-  /* ---------- SPACING ---------- */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --space-8: 64px;
-  --space-9: 96px;
+  /* Aliases */
+  --font-family-default: var(--font-sans);
+  --font-family-mono: var(--font-mono);
 
   /* ---------- RADIOS & BORDERS ---------- */
   --radius-sm: 4px;
@@ -60,17 +43,37 @@
   --motion-normal: 220ms ease;
   --motion-slow: 300ms ease;
 
-  /* Aliases */
-  --font-family-default: var(--font-sans);
-  --font-family-mono: var(--font-mono);
+  /* ---------- PALETA BASE (LIGHT MODE) ---------- */
+  --color-bg: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-surface-alt: #e8e8e8;
 
+  --color-text: #0f0f0f;
+  --color-text-muted: #444444;
+
+  --color-accent: #e53935;
+  --color-accent-dark: #b71c1c;
+
+  --color-neutral-beige: #f5e9d8;
+
+  /* ---------- SPACING ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* Aliases */
   --spacing-xs: var(--space-2);
   --spacing-sm: var(--space-3);
   --spacing-md: var(--space-4);
   --spacing-lg: var(--space-6);
   --spacing-xl: var(--space-8);
 
-  --color-primary: var(--color-accent);
 }
 
 /* ---------- DARK MODE ---------- */
@@ -87,4 +90,5 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.5);
+
 }

@@ -45,50 +45,91 @@ import 'caridad-ui';
 
 ---
 
-## 🌟 Componentes disponibles
 
-### `<e-header>`
+## Ejemplos de uso
+
+### 🌟 Componente `<c-header>`
 
 Encabezado reutilizable con slots para título, subtítulo y navegación.
 
 ```html
-<e-header>
-  <span slot="title">AiTe de Caldas</span>
-  <span slot="subtitle">Caridad UI Demo</span>
-  <a href="/" slot="nav">Inicio</a>
-</e-header>
+<c-header 
+  logo="https://placehold.co/32x32/3b82f6/ffffff.png" 
+  href="/" 
+  title="MiApp" 
+  variant="solid"
+  position="sticky" 
+  theme="auto"
+>
+  <!-- Navegación principal -->
+  <nav slot="nav">
+    <a href="/inicio">Inicio</a>
+    <a href="/productos">Productos</a>
+    <a href="/servicios">Servicios</a>
+    <a href="/contacto">Contacto</a>
+  </nav>
+</c-header>
 ```
-
-Más componentes próximamente:
-
-* `<e-button>`
-* `<e-card>`
-* `<e-dialog>`
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```plaintext
-design-system/
+caridad-ui/
 ├── src/
 │   ├── components/
-│       └── e-header/   <!-- Cada componente tiene su propia carpeta -->
-│           ├── e-header.js
-│           ├── e-header.css
-│           └── e-header.test.js
-│   ├── styles/
-│       ├── tokens.css
-│       └── global.css
-│   ├── utils/
-│   └── index.js        <!-- Punto de entrada (registra todos los componentes) -->
-├── public/
-│   └── assets/
+│       └── __securitytest__/
+│           ├── helpers.js
+│           ├── xss.attribute.test.js
+│           ├── xss.slots.test.js
+│           └── xss.text-content.test.js
+│       └── button/
+│           └── c-button.js
+│       └── card/
+│           └── c-card.js
+│       └── contact-form/
+│           └── c-contact-form.js
+│       └── cta/
+│           └── c-cta.js
+│       └── feature/
+│           └── c-feature.js
+│       └── footer/
+│           └── c-footer.js
+│       └── form/
+│           ├── c-checkbox.js
+│           ├── c-fields.js
+│           ├── c-label.js
+│           ├── c-switch.js
+│           └── c-textarea.js
+│       └── grid/
+│           └── c-grid.js
+│       └── header/
+│           └── c-header.js
+│       └── hero/
+│           └── c-hero.js
+│       └── input/
+│           └── c-input.js
+│       └── navbar/
+│           └── c-navbar.js
+│       └── section/
+│           └── c-section.js
+│       └── select/
+│           └── c-select.js
+│   └── tokens/
+│       ├── colors.css  
+│       ├── spacing.css
+│       └── typography.css
+│   └─ styles/
+│      └─ base.css
+│   └── index.js        <!-- registra todos los componentes -->
 ├── tests/
-|    └── test.html      <!-- Demo local -->
-├── .babelrc            <!-- Babel para transpilar JS moderno -->
+|    └── test.html      <!-- demo local -->
+├── .babelrc            <!-- babel para transpilar JS moderno -->
 ├── .gitignore
-├── package-lock.json
+├── jest.config.js
+├── jest.setup.js
+├── packagc-lock.json
 ├── package.json
 ├── README.md
 └── webpack.config.mjs  <!-- Webpack config (ESM) -->
@@ -133,6 +174,6 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 
 ## 👤 Autor
 
-Hecho con ❤️ por **Diego Toro Cárdenas**
+Hecho con ❤️ por **Armando Toro Cárdenas**
 
 GitHub: [@deCaldas](https://github.com/deCaldas).
