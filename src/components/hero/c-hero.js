@@ -1,159 +1,197 @@
-export class CHero extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-    this.render();
+// 1. Definimos los estilos fuera para aprovechar Constructable Stylesheets (Rendimiento y Caché)
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(`
+  :host {
+    display: block;
+    font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+    contain: content; /* Optimización de renderizado */
   }
 
+  section {
+    padding: var(--space-7, 4rem) var(--space-5, 1.5rem);
+    background: linear-gradient(
+      135deg,
+      var(--hero-bg-start, var(--color-accent, #E53935)) 0%,
+      var(--hero-bg-end, var(--color-accent-dark, #B71C1C)) 100%
+    );
+    color: var(--color-text, #fff);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .container {
+    max-width: 1200px;
+    width: 100%;
+    margin-inline: auto; /* Lógica moderna de propiedades lógicas */
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6, 2rem);
+    transition: all 0.3s ease;
+  }
+
+  /* LAYOUT: Centered (Default) */
+  .content:not(.is-split) {
+    text-align: center;
+  }
+
+  /* LAYOUT: Split */
+  .content.is-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7, 3rem);
+    align-items: center;
+    text-align: left;
+  }
+
+  /* Responsive para layout split */
+  @media (max-width: 768px) {
+    .content.is-split {
+      grid-template-columns: 1fr;
+      gap: var(--space-5, 1.5rem);
+      text-align: center; /* Fallback elegante en móvil */
+    }
+    
+    /* En móvil, cambiamos el orden visual si es necesario */
+    .content.is-split .media-wrapper {
+        order: -1; 
+    }
+  }
+
+  .text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 1.5rem);
+  }
+  
+  /* Alineación de botones según layout */
+  .cta-wrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .content:not(.is-split) .cta-wrapper {
+    justify-content: center;
+  }
+
+  .media-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* Si no es split, ocultamos el media wrapper visualmente pero lo mantenemos en el DOM */
+    /* Opcional: display: none si queremos removerlo del flujo completamente */
+  }
+  
+  .content:not(.is-split) .media-wrapper {
+    display: none; 
+  }
+
+  /* Styling de Slots por defecto (Opcional, con menor especificidad) */
+  ::slotted([slot="title"]) {
+    margin: 0;
+    font-size: var(--fs-4xl, 2.5rem);
+    line-height: 1.1;
+    font-weight: 800;
+  }
+  
+  ::slotted([slot="media"]) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: var(--shadow-lg, 0 10px 25px -5px rgba(0, 0, 0, 0.3));
+  }
+`);
+
+// 2. Definimos el template HTML estático una sola vez
+const template = document.createElement('template');
+template.innerHTML = `
+  <section part="base">
+    <div class="container">
+      <div class="content" id="layout-target">
+        
+        <div class="text-wrapper">
+          <slot name="title"></slot>
+          <slot name="subtitle"></slot>
+          <slot name="description"></slot>
+          <div class="cta-wrapper">
+            <slot name="cta"></slot>
+          </div>
+        </div>
+
+        <div class="media-wrapper">
+          <slot name="media"></slot>
+        </div>
+
+      </div>
+    </div>
+  </section>
+`;
+
+export class CHero extends HTMLElement {
   static get observedAttributes() {
     return ["layout"];
   }
 
-  attributeChangedCallback() {
-    this.render();
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    // Adoptar estilos compartidos (Rendimiento +++)
+    this.shadowRoot.adoptedStyleSheets = [sheet];
   }
 
-  // Lista blanca: solo permitimos layouts válidos
-  static VALID_LAYOUTS = ["centered", "split"];
+  connectedCallback() {
+    // Clonar template y añadir al Shadow DOM (Solo una vez)
+    if (!this.shadowRoot.hasChildNodes()) {
+      this.shadowRoot.appendChild(template.content.cloneNode(true));
+    }
 
-  render() {
-    const rawLayout = this.getAttribute("layout");
+    // Inicializar estado basado en atributos presentes
+    this._updateLayout();
+  }
 
-    // Si no es un layout válido, caemos a "centered"
-    const layout = CHero.VALID_LAYOUTS.includes(rawLayout)
-      ? rawLayout
-      : "centered";
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    if (name === "layout") {
+      this._updateLayout();
+    }
+  }
 
-    // NO interpolamos HTML no controlado
-    // Solo usamos `layout` dentro de className controlado (clase CSS)
+  // 3. Sincronización de Propiedades (DX +++)
+  get layout() {
+    return this.getAttribute("layout") || "centered";
+  }
 
-    const hasSplit = layout === "split";
+  set layout(value) {
+    if (value) {
+      this.setAttribute("layout", value);
+    } else {
+      this.removeAttribute("layout");
+    }
+  }
 
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: block;
-          font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        }
+  // 4. Lógica de UI separada y no destructiva
+  _updateLayout() {
+    const layoutTarget = this.shadowRoot.getElementById('layout-target');
+    if (!layoutTarget) return;
 
-        section {
-          padding: var(--space-7, 64px) var(--space-5, 24px);
-          background: linear-gradient(
-            135deg,
-            var(--hero-bg-start, var(--color-accent, #E53935)) 0%,
-            var(--hero-bg-end, var(--color-accent-dark, #B71C1C)) 100%
-          );
-          color: var(--color-text, #fff);
-          min-height: 500px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background var(--motion-normal, 200ms ease);
-        }
+    const currentLayout = this.layout;
+    const isValid = ["centered", "split"].includes(currentLayout);
+    const finalLayout = isValid ? currentLayout : "centered";
 
-        .container {
-          max-width: 1200px;
-          width: 100%;
-          margin: 0 auto;
-        }
-
-        .content.centered {
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: var(--space-6, 32px);
-        }
-
-        .content.split {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-7, 48px);
-          align-items: center;
-        }
-
-        @media (max-width: 768px) {
-          .content.split {
-            grid-template-columns: 1fr;
-            gap: var(--space-5, 24px);
-          }
-        }
-
-        .text-content {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-5, 24px);
-        }
-
-        ::slotted([slot="title"]) {
-          font-family: var(--font-mono, monospace);
-          font-size: var(--font-size-4xl, 2.5rem);
-          font-weight: 800;
-          line-height: var(--line-height-tight, 1.2);
-          margin: 0;
-        }
-
-        ::slotted([slot="subtitle"]) {
-          font-size: var(--font-size-xl, 1.25rem);
-          font-weight: 600;
-          opacity: 0.95;
-          margin: 0;
-        }
-
-        ::slotted([slot="description"]) {
-          font-size: var(--font-size-lg, 1.125rem);
-          line-height: var(--line-height-relaxed, 1.6);
-          opacity: 0.9;
-          margin: 0;
-        }
-
-        .cta-buttons {
-          display: flex;
-          gap: var(--space-4, 16px);
-          flex-wrap: wrap;
-        }
-
-        .content.centered .cta-buttons {
-          justify-content: center;
-        }
-
-        .media-content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        ::slotted([slot="media"]) {
-          max-width: 100%;
-          height: auto;
-          border-radius: var(--radius-lg, 12px);
-          box-shadow: var(--shadow-lg, 0 8px 20px rgba(0,0,0,0.5));
-          transition: transform var(--motion-normal, 200ms ease),
-                      box-shadow var(--motion-normal, 200ms ease);
-        }
-
-        ::slotted([slot="media"]:hover) {
-          transform: scale(1.02);
-        }
-      </style>
-
-      <section part="hero">
-        <div class="container">
-          <div class="content ${layout}">
-            <div class="text-content">
-              <slot name="title"></slot>
-              <slot name="subtitle"></slot>
-              <slot name="description"></slot>
-              <div class="cta-buttons">
-                <slot name="cta"></slot>
-              </div>
-            </div>
-
-            ${hasSplit ? `<div class="media-content"><slot name="media"></slot></div>` : ""}
-          </div>
-        </div>
-      </section>
-    `;
+    // Manipulación de clases mediante ClassList (Rápido y limpio)
+    if (finalLayout === 'split') {
+      layoutTarget.classList.add('is-split');
+    } else {
+      layoutTarget.classList.remove('is-split');
+    }
   }
 }
 

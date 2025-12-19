@@ -24,15 +24,6 @@ Todo se construye con tecnologías estándar:
 
 ## 📦 Instalación
 
-### Opción 1: vía CDN (Unpkg, Skypack, jsDelivr)
-```html
-<script type="module" src="https://unpkg.com/caridad-ui@2.0.1/dist/index.js"></script>
-````
-
-> Asegúrate de que tu servidor acepte el tipo MIME adecuado (`application/javascript`) o usa un CDN que lo entregue correctamente (como jsDelivr o Skypack).
-
-### Opción 2: npm
-
 ```bash
 npm install caridad-ui
 ```
@@ -45,50 +36,64 @@ import 'caridad-ui';
 
 ---
 
-## 🌟 Componentes disponibles
+## Ejemplos de uso
 
-### `<e-header>`
+### 🌟 Componente `<c-header>`
 
 Encabezado reutilizable con slots para título, subtítulo y navegación.
 
 ```html
-<e-header>
-  <span slot="title">AiTe de Caldas</span>
-  <span slot="subtitle">Caridad UI Demo</span>
-  <a href="/" slot="nav">Inicio</a>
-</e-header>
+<c-header 
+  logo="https://placehold.co/32x32/3b82f6/ffffff.png" 
+  href="/" 
+  title="MiApp" 
+  variant="solid"
+  position="sticky" 
+  theme="auto"
+>
+  <!-- Navegación principal -->
+  <nav slot="nav">
+    <a href="/inicio">Inicio</a>
+    <a href="/productos">Productos</a>
+    <a href="/servicios">Servicios</a>
+    <a href="/contacto">Contacto</a>
+  </nav>
+</c-header>
 ```
-
-Más componentes próximamente:
-
-* `<e-button>`
-* `<e-card>`
-* `<e-dialog>`
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```plaintext
-design-system/
+caridad-ui/
 ├── src/
 │   ├── components/
-│       └── e-header/   <!-- Cada componente tiene su propia carpeta -->
-│           ├── e-header.js
-│           ├── e-header.css
-│           └── e-header.test.js
-│   ├── styles/
-│       ├── tokens.css
-│       └── global.css
-│   ├── utils/
-│   └── index.js        <!-- Punto de entrada (registra todos los componentes) -->
-├── public/
-│   └── assets/
-├── tests/
-|    └── test.html      <!-- Demo local -->
-├── .babelrc            <!-- Babel para transpilar JS moderno -->
+│       └── __securitytest__/
+│           ├── helpers.js
+│           ├── xss.attribute.test.js
+│           ├── xss.slots.test.js
+│           └── xss.text-content.test.js
+│       └── contact-form/
+│           └── c-contact-form.js
+│       └── footer/
+│           └── c-footer.js
+│       └── header/
+│           └── c-header.js
+│       └── hero/
+│           └── c-hero.js
+│       └── section/
+│           └── c-section.js
+│   └── tokens/
+│       ├── colors.css  
+│       ├── spacing.css
+│       └── typography.css
+│   └── index.js        <!-- registra todos los componentes -->
+├── .babelrc            <!-- babel para transpilar JS moderno -->
 ├── .gitignore
-├── package-lock.json
+├── jest.config.js
+├── jest.setup.js
+├── packagc-lock.json
 ├── package.json
 ├── README.md
 └── webpack.config.mjs  <!-- Webpack config (ESM) -->
@@ -99,11 +104,12 @@ design-system/
 ## 🧪 Desarrollo local
 
 ```bash
-git clone https://github.com/tuusuario/caridad-ui.git
+git clone https://github.com/deCaldas/caridad-ui.git
 cd caridad-ui
 npm install
 npm run dev     # Compila en modo desarrollo
 npm run build   # Empaqueta para producción
+npm run test    # Ejecuta pruebas
 ```
 
 Luego usa un servidor local como `npx serve .` o `npx http-server .`.
@@ -116,6 +122,7 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 * Babel (`@babel/preset-env`)
 * Webpack 5 (ES Modules, outputModule)
 * HTML5 + CSS encapsulado
+* Jest para pruebas
 
 ---
 
@@ -133,6 +140,6 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 
 ## 👤 Autor
 
-Hecho con ❤️ por **Diego Toro Cárdenas**
+Hecho con ❤️ por **Armando Toro Cárdenas**
 
 GitHub: [@deCaldas](https://github.com/deCaldas).

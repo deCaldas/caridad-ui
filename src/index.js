@@ -1,20 +1,12 @@
 // src/index.js
 // Import all components
-import './components/button/c-button.js';
-import './components/card/c-card.js';
+
 import './components/contact-form/c-contact-form.js';
-import './components/cta/c-cta.js';
-import './components/feature/c-feature.js';
+
 import './components/footer/c-footer.js';
-import './components/grid/c-grid.js';
+
 import './components/header/c-header.js';
 import './components/hero/c-hero.js';
-import './components/input/c-input.js';
-import './components/navbar/c-navbar.js';
+
 import './components/section/c-section.js';
-import './components/select/c-select.js';
-import './components/form/c-checkbox.js';
-import './components/form/c-field.js';
-import './components/form/c-label.js';
-import './components/form/c-switch.js';
-import './components/form/c-textarea.js';
+

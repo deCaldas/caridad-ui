@@ -8,7 +8,8 @@ const __dirname = path.dirname(__filename);
 const componentFiles = glob.sync('./src/components/**/*/.js')
 
 const entries = {
-  index: './src/index.js'
+  index: './src/index.js',
+  tokensTokens: './src/tokens/tokens.css',
 }
 
 componentFiles.forEach(file => {
