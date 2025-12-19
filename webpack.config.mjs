@@ -10,7 +10,6 @@ const componentFiles = glob.sync('./src/components/**/*/.js')
 const entries = {
   index: './src/index.js',
   tokensTokens: './src/tokens/tokens.css',
-
 }
 
 componentFiles.forEach(file => {

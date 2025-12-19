@@ -1,218 +1,198 @@
-export const template = document.createElement('template');
+// 1. Estilos compartidos optimizados (Constructable Stylesheets)
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(`
+  :host {
+    display: block;
+    --_bg: var(--color-surface, #ffffff);
+    --_radius: var(--radius-lg, 8px);
+    --_shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    --_spacing: var(--space-6, 1.5rem);
+    font-family: system-ui, sans-serif;
+  }
 
+  /* Contenedor principal actúa como el form visual */
+  .form-container {
+    background: var(--_bg);
+    border-radius: var(--_radius);
+    box-shadow: var(--_shadow);
+    padding: var(--_spacing);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5, 1rem);
+  }
+
+  /* Grid layout para campos agrupados */
+  .grid-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5, 1rem);
+  }
+
+  /* Mensajes de estado (Alertas) */
+  .status-msg {
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    display: none; /* Oculto por defecto */
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Estados controlados por atributo del host */
+  :host([state="success"]) .status-msg.success { display: block; }
+  :host([state="error"]) .status-msg.error { display: block; }
+  
+  /* Loading state: Deshabilitar interacción visualmente */
+  :host([state="loading"]) .form-container { opacity: 0.7; pointer-events: none; }
+
+  .status-msg.success {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+
+  .status-msg.error {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+  }
+
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+`);
+
+const template = document.createElement('template');
 template.innerHTML = `
-  <style>
-    @import url('/src/styles/tokens.css');
+  <div class="form-container" part="container">
+    <div aria-live="polite" aria-atomic="true">
+      <div class="status-msg success" part="msg-success">¡Enviado correctamente!</div>
+      <div class="status-msg error" part="msg-error">Error al enviar. Verifica los datos.</div>
+    </div>
 
-    :host {
-      display: block;
-      font-family: var(--font-sans);
-      color: var(--color-text);
-    }
-
-    form {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
-      padding: var(--space-6) var(--space-5);
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
-
-    @media (max-width: 768px) {
-      .row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .msg {
-      padding: var(--space-4);
-      border-radius: var(--radius-md);
-      text-align: center;
-      display: none;
-      font-size: var(--font-size-sm);
-      font-family: var(--font-mono);
-      border: var(--border-width) solid transparent;
-    }
-
-    .msg.success {
-      background: rgba(110, 231, 183, 0.08);
-      color: #6ee7b7;
-      border-color: #6ee7b7;
-    }
-
-    .msg.error {
-      background: rgba(252, 165, 165, 0.08);
-      color: #fca5a5;
-      border-color: #fca5a5;
-    }
-
-    :host([state="success"]) .msg.success { display: block; }
-    :host([state="error"])   .msg.error   { display: block; }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      padding-top: var(--space-3);
-    }
-
-    form,
-    .msg {
-      transition: all var(--motion-normal);
-    }
-  </style>
-
-  <form novalidate>
-      <div class="msg success" role="status">¡Mensaje enviado exitosamente!</div>
-      <div class="msg error" role="alert">Error al enviar el mensaje. Intenta nuevamente.</div>
-
-      <div class="row">
+    <form id="internal-form" novalidate>
+      <div class="grid-row">
         <slot name="name"></slot>
         <slot name="email"></slot>
       </div>
-
       <slot name="subject"></slot>
       <slot name="message"></slot>
-
-      <div class="actions">
-        <slot name="submit"></slot>
+      <slot></slot> <div class="actions">
+        <slot name="submit">
+          <button type="submit">Enviar</button>
+        </slot>
       </div>
-  </form>
+    </form>
+  </div>
 `;
 
 export class CContactForm extends HTMLElement {
-  static formAssociated = true;
-
-  constructor() {
-    super();
-
-    // Rate limiting interno (3s)
-    this._lastSubmit = 0;
-    this._submitThrottle = 3000;
-
-    this._internals = this.attachInternals();
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-
-    this.form = this.shadowRoot.querySelector('form');
-    this.form.addEventListener('submit', this._onSubmit.bind(this));
-
-    // Blindar slots contra XSS
-    this._protectSlots();
-  }
-
-  // -------------------------
-  // 🔰 Protección Anti-XSS para Slots
-  // -------------------------
-  _sanitizeNode(node) {
-    if (!node) return null;
-
-    // Elementos prohibidos
-    const forbiddenTags = ['script', 'iframe', 'object', 'embed', 'link'];
-    if (node.nodeType === Node.ELEMENT_NODE) {
-      if (forbiddenTags.includes(node.tagName.toLowerCase())) {
-        node.remove();
-        return null;
-      }
-
-      // Remover atributos on*
-      [...node.attributes].forEach(attr => {
-        if (attr.name.startsWith('on')) node.removeAttribute(attr.name);
-      });
-    }
-
-    // Sanitizar hijos recursivamente
-    [...node.childNodes].forEach(child => this._sanitizeNode(child));
-
-    return node;
-  }
-
-  _protectSlots() {
-    const slots = this.shadowRoot.querySelectorAll('slot');
-    slots.forEach(slot => {
-      slot.addEventListener('slotchange', () => {
-        slot.assignedNodes().forEach(n => this._sanitizeNode(n));
-      });
-    });
-  }
-
-  // -------------------------
-  // Observación de atributos
-  // -------------------------
   static get observedAttributes() {
     return ['state'];
   }
 
-  attributeChangedCallback(name, _, value) {
-    if (name === 'state') {
-      this._announceStatus(value);
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.adoptedStyleSheets = [sheet];
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    this._form = this.shadowRoot.getElementById('internal-form');
+    this._handleSubmit = this._handleSubmit.bind(this);
   }
 
-  _announceStatus(state) {
-    if (state === 'success') {
-      this._internals.setValidity({});
-    }
-
-    if (state === 'error') {
-      this._internals.setValidity(
-        { customError: true },
-        "Hubo un error enviando el formulario."
-      );
-    }
+  connectedCallback() {
+    this._form.addEventListener('submit', this._handleSubmit);
   }
 
-  // -------------------------
-  // API del formulario
-  // -------------------------
+  disconnectedCallback() {
+    this._form.removeEventListener('submit', this._handleSubmit);
+  }
+
+  // API Pública: Estado
+  get state() { return this.getAttribute('state') || 'idle'; }
+  set state(val) {
+    if (val) this.setAttribute('state', val);
+    else this.removeAttribute('state');
+  }
+
+  /**
+   * Recolecta datos de los inputs en el Light DOM (slots)
+   */
   get value() {
-    return Object.fromEntries(new FormData(this.form));
+    const data = {};
+    // Buscamos inputs, selects y textareas dentro del host (Light DOM)
+    const inputs = this.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+      if (input.name && !input.disabled) {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+          if (input.checked) data[input.name] = input.value;
+        } else {
+          data[input.name] = input.value;
+        }
+      }
+    });
+    return data;
   }
 
+  /**
+   * Resetea el formulario y el estado
+   */
   reset() {
-    this.form.reset();
     this.removeAttribute('state');
+    const inputs = this.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => input.value = ''); // Reset manual simple
   }
 
-  // -------------------------
-  // Submit + Rate Limiting
-  // -------------------------
-  _onSubmit(e) {
+  _handleSubmit(e) {
     e.preventDefault();
+    if (this.state === 'loading') return;
 
-    // Rate limiting
-    const now = Date.now();
-    if (now - this._lastSubmit < this._submitThrottle) {
-      this.setAttribute('state', 'error');
+    // 1. Validación de inputs en Light DOM
+    const inputs = this.querySelectorAll('input, textarea, select');
+    let isValid = true;
+
+    // Usar la validación nativa del navegador en cada input distribuido
+    inputs.forEach(input => {
+      if (!input.checkValidity()) {
+        isValid = false;
+        input.reportValidity(); // Muestra el popup nativo en el input correcto
+      }
+    });
+
+    if (!isValid) {
+      // Opcional: Podríamos poner state="error" aquí, pero el navegador ya mostró feedback
       return;
     }
-    this._lastSubmit = now;
 
-    if (!this.form.checkValidity()) {
-      this.form.reportValidity();
-      return;
-    }
+    // 2. Transición a Loading
+    this.state = 'loading';
 
-    const data = this.value;
-
-    this.dispatchEvent(new CustomEvent('form-submit', {
-      detail: data,
+    // 3. Emitir evento con los datos
+    this.dispatchEvent(new CustomEvent('c-submit', {
+      detail: {
+        data: this.value,
+        // Callbacks para que el padre controle el UI del componente
+        success: () => {
+          this.state = 'success';
+          setTimeout(() => this.reset(), 3000); // Auto-reset opcional
+        },
+        error: (msg) => {
+          this.state = 'error';
+          if (msg) {
+            // Lógica avanzada: inyectar mensaje de error específico si fuera necesario
+            const errDiv = this.shadowRoot.querySelector('.status-msg.error');
+            if (errDiv) errDiv.textContent = msg;
+          }
+        }
+      },
       bubbles: true,
       composed: true
     }));
-
-    this.setAttribute('state', 'success');
-
-    setTimeout(() => this.reset(), 3000);
   }
 }
 

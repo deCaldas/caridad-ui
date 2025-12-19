@@ -140,7 +140,7 @@ caridad-ui/
 ## 🧪 Desarrollo local
 
 ```bash
-git clone https://github.com/tuusuario/caridad-ui.git
+git clone https://github.com/deCaldas/caridad-ui.git
 cd caridad-ui
 npm install
 npm run dev     # Compila en modo desarrollo
