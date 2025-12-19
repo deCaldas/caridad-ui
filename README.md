@@ -24,15 +24,6 @@ Todo se construye con tecnologías estándar:
 
 ## 📦 Instalación
 
-### Opción 1: vía CDN (Unpkg, Skypack, jsDelivr)
-```html
-<script type="module" src="https://unpkg.com/caridad-ui@2.0.1/dist/index.js"></script>
-````
-
-> Asegúrate de que tu servidor acepte el tipo MIME adecuado (`application/javascript`) o usa un CDN que lo entregue correctamente (como jsDelivr o Skypack).
-
-### Opción 2: npm
-
 ```bash
 npm install caridad-ui
 ```
@@ -44,7 +35,6 @@ import 'caridad-ui';
 ```
 
 ---
-
 
 ## Ejemplos de uso
 
@@ -84,47 +74,21 @@ caridad-ui/
 │           ├── xss.attribute.test.js
 │           ├── xss.slots.test.js
 │           └── xss.text-content.test.js
-│       └── button/
-│           └── c-button.js
-│       └── card/
-│           └── c-card.js
 │       └── contact-form/
 │           └── c-contact-form.js
-│       └── cta/
-│           └── c-cta.js
-│       └── feature/
-│           └── c-feature.js
 │       └── footer/
 │           └── c-footer.js
-│       └── form/
-│           ├── c-checkbox.js
-│           ├── c-fields.js
-│           ├── c-label.js
-│           ├── c-switch.js
-│           └── c-textarea.js
-│       └── grid/
-│           └── c-grid.js
 │       └── header/
 │           └── c-header.js
 │       └── hero/
 │           └── c-hero.js
-│       └── input/
-│           └── c-input.js
-│       └── navbar/
-│           └── c-navbar.js
 │       └── section/
 │           └── c-section.js
-│       └── select/
-│           └── c-select.js
 │   └── tokens/
 │       ├── colors.css  
 │       ├── spacing.css
 │       └── typography.css
-│   └─ styles/
-│      └─ base.css
 │   └── index.js        <!-- registra todos los componentes -->
-├── tests/
-|    └── test.html      <!-- demo local -->
 ├── .babelrc            <!-- babel para transpilar JS moderno -->
 ├── .gitignore
 ├── jest.config.js
@@ -145,6 +109,7 @@ cd caridad-ui
 npm install
 npm run dev     # Compila en modo desarrollo
 npm run build   # Empaqueta para producción
+npm run test    # Ejecuta pruebas
 ```
 
 Luego usa un servidor local como `npx serve .` o `npx http-server .`.
@@ -157,6 +122,7 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 * Babel (`@babel/preset-env`)
 * Webpack 5 (ES Modules, outputModule)
 * HTML5 + CSS encapsulado
+* Jest para pruebas
 
 ---
 
