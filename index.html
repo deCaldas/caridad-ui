@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caridad UI — Web Components Modernos</title>
+
+    <!-- Metadata SEO -->
+    <meta name="description"
+        content="Caridad UI es un sistema de Web Components modernos, accesibles y sin dependencias. Construye interfaces elegantes y rápidas con HTML puro." />
+    <meta name="author" content="Armando Toro Cárdenas" />
+
+    <!-- Favicon opcional -->
+    <link rel="icon" href="./dist/favicon.png" />
+
+    <!-- Web Components modo desarrollos 
+    <script type="module" src="../src/index.js"></script>
+    <link rel="stylesheet" href="../src/tokens/tokens.css">
+    Sube o baja esta línea según sea el caso -->
+
+    <!-- Web Components compilados 
+    Sube o baja esta línea según sea el caso -->
+    <script type="module" src="./dist/index.js"></script>
+    <link rel="stylesheet" href="./dist/src/tokens/tokens.css">
+
+    <style>
+        /* ---------- RESET ESTÁNDAR ---------- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 100%;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* ---------- BASE ---------- */
+        body {
+            width: 100%;
+            min-height: 100vh;
+
+            font-family: var(--font-family-default);
+            color: var(--color-text);
+            background: var(--color-bg);
+
+            line-height: var(--line-height-normal);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        section {
+            padding: var(--space-8) var(--space-4);
+        }
+
+        /* Utility */
+        .container {
+            width: min(1200px, 90%);
+            margin-inline: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+    <c-header logo="https://placehold.co/32x32/3b82f6/ffffff.png" href="/public/test.html" title="MiApp" variant="solid"
+        position="sticky" theme="auto">
+
+        <!-- Navegación principal -->
+        <nav slot="nav">
+            <a href="/inicio">Inicio</a>
+            <a href="/productos">Productos</a>
+            <a href="/servicios">Servicios</a>
+            <a href="/contacto">Contacto</a>
+        </nav>
+
+        <!-- Acciones (botones, búsqueda, etc.) -->
+        <div slot="actions">
+            <button onclick="console.log('btn-icon-search')" class="btn-icon">
+                <svg width="20" height="20" fill="currentColor">
+                    <use href="#icon-search" />
+                </svg>
+            </button>
+            <button onclick="console.log('btn-icon-notification')" class="btn-icon">
+                <svg width="20" height="20" fill="currentColor">
+                    <use href="#icon-notification" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Avatar del usuario -->
+        <div slot="avatar" class="avatar">
+            <img src="https://placehold.co/40x40/8b5cf6/ffffff.png" alt="Usuario">
+        </div>
+
+        <!-- Menú desplegable del usuario -->
+        <div slot="user-menu">
+            <button onclick="console.log('Perfil')">👤 Mi Perfil</button>
+            <button onclick="console.log('Configuración')">⚙️ Configuración</button>
+            <button onclick="console.log('Cerrar sesión')">🚪 Cerrar Sesión</button>
+        </div>
+
+        <!-- Slots adicionales -->
+        <div slot="brand">
+            <span style="color: var(--color-accent); font-size: 0.8em;">Pro</span>
+        </div>
+    </c-header>
+
+    <!-- Para los iconos SVG (añadir en tu HTML) -->
+    <svg style="display: none;">
+        <symbol id="icon-search" viewBox="0 0 24 24">
+            <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </symbol>
+        <symbol id="icon-notification" viewBox="0 0 24 24">
+            <path
+                d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+        </symbol>
+    </svg>
+
+    <c-hero id="dynamicHero" layout="centered">
+        <h1 slot="title">Layout Dinámico</h1>
+        <img slot="media" src="https://via.placeholder.com/400" alt="Demo">
+        <button slot="cta" onclick="toggleLayout()">Cambiar Layout</button>
+    </c-hero>
+
+    <script>
+        function toggleLayout() {
+            const hero = document.getElementById('dynamicHero');
+            // Gracias al getter/setter, esto actualiza el atributo y la vista automáticamente
+            hero.layout = hero.layout === 'centered' ? 'split' : 'centered';
+            console.log(`Nuevo layout: ${hero.layout}`);
+        }
+    </script>
+    <c-section variant="accent" padding="large">
+        <h2 slot="title">Llamada a la Acción</h2>
+        <p>
+            Este bloque usa el color de acento y texto inverso automáticamente.
+        </p>
+        <button>Click aquí</button>
+    </c-section>
+
+    <c-section variant="secondary" padding="none">
+        <img src="banner.jpg" style="width:100%; display:block;" alt="Banner full width">
+    </c-section>
+
+    <c-contact-form>
+        <input slot="name" type="text" name="fullName" placeholder="Tu Nombre" required>
+        <input slot="email" type="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+
+        <input slot="subject" type="text" name="subject" placeholder="Asunto" required>
+        <textarea slot="message" name="message" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
+
+        <button slot="submit" type="submit">Enviar Mensaje</button>
+    </c-contact-form>
+
+    <c-footer variant="minimal">
+        <div slot="copyright" style="font-size: 0.75rem;">
+            <p>© 2025 Compañía. Todos los derechos reservados.</p>
+            <p style="opacity: 0.6; margin-top: 0.25rem;">
+                <small>Versión 2.1.0</small>
+            </p>
+        </div>
+    </c-footer>
+</body>
+
+</html>

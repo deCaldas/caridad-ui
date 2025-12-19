@@ -1,0 +1,94 @@
+:root {
+
+  /* ---------- TIPOGRAFÍA ---------- */
+  --font-sans:
+    "Inter",
+    system-ui,
+    sans-serif;
+
+  --font-mono:
+    "JetBrains Mono",
+    monospace;
+
+  --font-size-xs: clamp(0.75rem, 0.72rem + 0.1vw, 0.8rem);
+  --font-size-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.95rem);
+  --font-size-md: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --font-size-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --font-size-xl: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  --font-size-2xl: clamp(2.25rem, 2rem + 2vw, 3rem);
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  /* Aliases */
+  --font-family-default: var(--font-sans);
+  --font-family-mono: var(--font-mono);
+
+  /* ---------- RADIOS & BORDERS ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --border-width: 1px;
+  --border-color: rgba(0, 0, 0, 0.08);
+
+  /* ---------- SHADOWS ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.18);
+
+  /* ---------- MOTION ---------- */
+  --motion-fast: 150ms ease;
+  --motion-normal: 220ms ease;
+  --motion-slow: 300ms ease;
+
+  /* ---------- PALETA BASE (LIGHT MODE) ---------- */
+  --color-bg: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-surface-alt: #e8e8e8;
+
+  --color-text: #0f0f0f;
+  --color-text-muted: #444444;
+
+  --color-accent: #e53935;
+  --color-accent-dark: #b71c1c;
+
+  --color-neutral-beige: #f5e9d8;
+
+  /* ---------- SPACING ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* Aliases */
+  --spacing-xs: var(--space-2);
+  --spacing-sm: var(--space-3);
+  --spacing-md: var(--space-4);
+  --spacing-lg: var(--space-6);
+  --spacing-xl: var(--space-8);
+
+}
+
+/* ---------- DARK MODE ---------- */
+:root[data-theme="dark"] {
+  --color-bg: #0f0f0f;
+  --color-surface: #1c1c1c;
+  --color-surface-alt: #2a2a2a;
+
+  --color-text: #ffffff;
+  --color-text-muted: #c2c2c2;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+}
