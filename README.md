@@ -128,7 +128,7 @@ Luego usa un servidor local como `npx serve .` o `npx http-server .`.
 
 ## 🌐 Sitio oficial:
 
-[https://caridad-ui.js.org](https://caridad-ui.js.org) _(próximamente)_
+[https://caridad-ui.js.org](https://caridad-ui.js.org)
 
 ---
 
