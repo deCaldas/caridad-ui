@@ -4,6 +4,7 @@
 
 ![npm](https://img.shields.io/npm/v/caridad-ui)
 ![license](https://img.shields.io/npm/l/caridad-ui)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/caridad-ui)
 
 **Web Components modernos, accesibles y sin dependencias.**  
 Diseñado para proyectos artísticos, independientes y open source.
